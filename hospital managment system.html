@@ -1,0 +1,1817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CarePilot Hospital System & Online Pharmacy Portal</title>
+<style>
+:root {
+  --teal-dark: #124346;
+  --teal-main: #195e63;
+  --teal-light: #23787e;
+  --teal-soft: #eaf4f4;
+  --teal-accent: #2dd4bf;
+  --blue-pill: #38bdf8;
+  --dark-pill: #161e27;
+  --bg-light: #f4f8f8;
+  --card-bg: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --radius-lg: 24px;
+  --radius-md: 16px;
+  --radius-sm: 10px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--bg-light);
+  color: var(--text-main);
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+/* UNIVERSAL RESPONSIVENESS */
+@media (max-width: 768px) {
+  .container, body { padding: 0 !important; max-width: 100% !important; }
+  .row, .grid, .two-col, .hero-grid, .services-grid, .doctors-grid, .dash-stats, .pharmacy-layout { 
+    flex-direction: column !important; 
+    grid-template-columns: 1fr !important; 
+  }
+  h1 { font-size: 22pt !important; }
+  h2 { font-size: 18pt !important; }
+  table { font-size: 11pt !important; }
+  .hero-card, .info-box, .card, .dash-card { padding: 16px !important; }
+  .hero-section { padding-bottom: 40px !important; }
+  .nav-links { display: none !important; }
+  .hero-text-side { max-width: 100% !important; }
+  .hero-image-side { margin-top: 30px; }
+  .dash-app { flex-direction: column !important; }
+  .dash-sidebar { width: 100% !important; border-right: none !important; border-bottom: 1px solid #24415f; }
+}
+
+/* TOP NAVBAR */
+.top-nav {
+  background-color: var(--teal-main);
+  color: #fff;
+  padding: 16px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  cursor: pointer;
+}
+.brand-logo .dot {
+  width: 10px;
+  height: 10px;
+  background-color: var(--teal-accent);
+  border-radius: 50%;
+  display: inline-block;
+}
+.nav-links {
+  display: flex;
+  gap: 24px;
+  list-style: none;
+}
+.nav-links a {
+  color: #e0f2fe;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  transition: color 0.2s;
+  cursor: pointer;
+}
+.nav-links a:hover, .nav-links a.active {
+  color: #ffffff;
+  font-weight: 700;
+}
+.nav-right {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.btn-cart-nav {
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 99px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-cart-nav:hover {
+  background: rgba(255,255,255,0.3);
+}
+.btn-join {
+  background: transparent;
+  border: 1.5px solid rgba(255,255,255,0.4);
+  color: #fff;
+  padding: 8px 20px;
+  border-radius: 99px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-join:hover {
+  background: rgba(255,255,255,0.15);
+  border-color: #fff;
+}
+.btn-dashboard-toggle {
+  background: var(--teal-accent);
+  color: var(--teal-dark);
+  border: none;
+  padding: 9px 20px;
+  border-radius: 99px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.btn-dashboard-toggle:hover {
+  transform: translateY(-2px);
+}
+
+/* HERO SECTION (MEDICO STYLE) */
+.hero-section {
+  background-color: var(--teal-main);
+  color: #ffffff;
+  position: relative;
+  padding: 40px 60px 100px;
+  overflow: hidden;
+}
+.hero-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 40px;
+  align-items: center;
+}
+.hero-text-side {
+  max-width: 580px;
+}
+.hero-title {
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -1px;
+  margin-bottom: 20px;
+}
+.hero-subtitle {
+  font-size: 16px;
+  color: #cbe5e7;
+  margin-bottom: 36px;
+  line-height: 1.6;
+}
+.hero-cta-wrap {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.btn-book-hero {
+  background: #ffffff;
+  color: var(--teal-dark);
+  border: none;
+  padding: 16px 32px;
+  border-radius: 99px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  transition: all 0.2s;
+}
+.btn-book-hero:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px rgba(0,0,0,0.25);
+  background: #f8fafc;
+}
+.btn-pharmacy-hero {
+  background: var(--dark-pill);
+  color: #ffffff;
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 16px 28px;
+  border-radius: 99px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-pharmacy-hero:hover {
+  background: #000;
+  transform: translateY(-3px);
+}
+
+.explore-badge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.circle-explore {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--dark-pill);
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+.circle-explore:hover {
+  transform: rotate(45deg);
+}
+
+/* HERO IMAGE ORGANIC BLOB CONTAINER */
+.hero-image-side {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+.blob-shape {
+  width: 100%;
+  max-width: 440px;
+  height: 440px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 60% 40% 70% 30% / 50% 60% 40% 50%;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: hidden;
+  border: 2px solid rgba(255,255,255,0.2);
+}
+.doctor-badge-pill {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--blue-pill);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 15px;
+  padding: 8px 24px;
+  border-radius: 99px;
+  box-shadow: 0 8px 20px rgba(56, 189, 248, 0.4);
+  z-index: 10;
+}
+.hero-svg-illustration {
+  width: 85%;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+/* ORGANIC WAVE SEPARATOR */
+.hero-wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+.hero-wave svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 60px;
+}
+.hero-wave .shape-fill {
+  fill: var(--bg-light);
+}
+
+/* MAIN CONTENT CONTAINER */
+.page-container {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+}
+
+/* SECTION TITLE BADGE */
+.section-badge-pill {
+  display: inline-block;
+  background-color: var(--dark-pill);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 16px;
+  padding: 8px 22px;
+  border-radius: 12px;
+  transform: rotate(-2deg);
+  margin-bottom: 24px;
+}
+.section-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 32px;
+}
+.section-subtext {
+  color: var(--text-muted);
+  font-size: 15px;
+  max-width: 480px;
+}
+
+/* SERVICES CARDS GRID */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 70px;
+}
+.service-card {
+  border-radius: var(--radius-lg);
+  padding: 32px 28px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 260px;
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+.service-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 32px rgba(0,0,0,0.06);
+}
+.service-card.teal {
+  background-color: var(--teal-main);
+  color: #ffffff;
+}
+.service-card.white {
+  background-color: #ffffff;
+  color: var(--text-main);
+  border: 1px solid var(--border);
+}
+.service-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+.teal .service-card-icon {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+}
+.white .service-card-icon {
+  background: var(--teal-soft);
+  color: var(--teal-main);
+}
+.service-card-title {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.25;
+  margin-bottom: 12px;
+}
+.learn-more-tab {
+  position: absolute;
+  right: 20px;
+  bottom: 24px;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  background: var(--dark-pill);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 14px 8px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.learn-more-tab:hover {
+  background: var(--teal-accent);
+  color: var(--teal-dark);
+}
+.card-bottom-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 20px;
+}
+.action-circle-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  cursor: pointer;
+}
+.teal .action-circle-btn {
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+}
+.white .action-circle-btn {
+  background: var(--bg-light);
+  color: var(--text-main);
+}
+
+/* ONLINE PHARMACY PORTAL VIEW */
+.pharmacy-portal-section {
+  display: none;
+  padding: 20px 0 60px;
+}
+.pharmacy-portal-section.active {
+  display: block;
+}
+
+.pharmacy-header {
+  background: linear-gradient(135deg, var(--teal-dark), var(--teal-main));
+  color: #fff;
+  padding: 40px;
+  border-radius: var(--radius-lg);
+  margin-bottom: 36px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.pharmacy-title-area h2 {
+  font-size: 36px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+.pharmacy-title-area p {
+  color: #cbe5e7;
+  font-size: 16px;
+}
+.pharmacy-search-bar {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  max-width: 500px;
+  margin-top: 16px;
+}
+.pharmacy-search-bar input {
+  flex: 1;
+  padding: 14px 20px;
+  border-radius: 99px;
+  border: none;
+  font-size: 15px;
+  outline: none;
+}
+
+.cat-pills-row {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  margin-bottom: 30px;
+}
+.cat-pill {
+  padding: 8px 20px;
+  border-radius: 99px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.cat-pill.active, .cat-pill:hover {
+  background: var(--teal-main);
+  color: #ffffff;
+  border-color: var(--teal-main);
+}
+
+.pharmacy-layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 30px;
+}
+
+.meds-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 20px;
+}
+.med-card {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+.med-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+}
+.rx-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: #fef3c7;
+  color: #b45309;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+}
+.med-icon-wrap {
+  width: 56px;
+  height: 56px;
+  background: var(--teal-soft);
+  color: var(--teal-main);
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  font-size: 26px;
+  margin-bottom: 14px;
+}
+.med-name {
+  font-weight: 700;
+  font-size: 17px;
+  margin-bottom: 4px;
+}
+.med-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+.med-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+.med-price {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--teal-dark);
+}
+.btn-add-cart {
+  background: var(--teal-main);
+  color: #ffffff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-add-cart:hover {
+  background: var(--teal-dark);
+}
+
+/* CART SIDEBAR / SUMMARY */
+.pharmacy-cart-card {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  position: sticky;
+  top: 100px;
+}
+.cart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.cart-items-list {
+  max-height: 280px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+}
+.cart-item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+.cart-item-qty {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-qty {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg-light);
+  cursor: pointer;
+  font-weight: 700;
+}
+.cart-summary-line {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+.cart-summary-line.total {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-main);
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+  margin-top: 12px;
+}
+
+/* PEDIATRIC / SECONDARY BANNER */
+.secondary-banner {
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  padding: 36px 44px;
+  margin-bottom: 70px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+}
+.banner-title {
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+.banner-desc {
+  color: var(--text-muted);
+  font-size: 15px;
+  margin-bottom: 24px;
+}
+.banner-btns {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+.btn-dark {
+  background: var(--dark-pill);
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 99px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-link {
+  color: var(--teal-main);
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 15px;
+}
+
+/* TOP DOCTORS SECTION */
+.section-title-large {
+  font-size: 32px;
+  font-weight: 800;
+  margin-bottom: 30px;
+  letter-spacing: -0.5px;
+}
+.doctors-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 70px;
+}
+.doctor-card {
+  background: #ffffff;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  padding: 24px 20px;
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.doctor-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+}
+.doctor-avatar-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--teal-soft);
+  margin: 0 auto 16px;
+  display: grid;
+  place-items: center;
+  font-size: 28px;
+  color: var(--teal-main);
+  font-weight: 800;
+  border: 2px solid var(--teal-accent);
+}
+.doctor-name {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.doctor-spec {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+.doc-card-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+.btn-doc-action {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: #fff;
+  cursor: pointer;
+}
+.btn-doc-action.primary {
+  background: var(--teal-main);
+  color: #fff;
+  border-color: var(--teal-main);
+}
+
+/* CLINICAL SYSTEM DASHBOARD VIEW */
+.dashboard-view {
+  display: none;
+  background: #07111f;
+  color: #eff8ff;
+  min-height: 100vh;
+}
+.dashboard-view.active {
+  display: block;
+}
+
+/* SYSTEM INTERNAL STYLES */
+.dash-app { display: flex; min-height: 100vh; }
+.dash-sidebar { width: 250px; background: #081424ef; border-right: 1px solid #24415f; padding: 22px 14px; flex-shrink: 0; display: flex; flex-direction: column; justify-content: space-between; }
+.dash-brand { display: flex; align-items: center; gap: 11px; font-weight: 800; font-size: 18px; padding: 5px 10px 30px; color: #fff; cursor: pointer; }
+.dash-logo { width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(135deg,#28c7b8,#48a9ff); display: grid; place-items: center; color: #061522; font-weight: 900; }
+.dash-nav { display: grid; gap: 7px; }
+.dash-nav button { border: 1px solid transparent; background: transparent; text-align: left; padding: 12px 13px; border-radius: 13px; color: #9ab0c7; cursor: pointer; font: inherit; display: flex; align-items: center; gap: 10px; transition: all .2s ease; }
+.dash-nav button.active, .dash-nav button:hover { background: #28c7b81f; color: #28c7b8; }
+.dash-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.dash-topbar { height: 78px; border-bottom: 1px solid #24415f; display: flex; align-items: center; justify-content: space-between; padding: 0 32px; background: #081424a0; backdrop-filter: blur(8px); }
+.dash-content { padding: 30px; max-width: 1450px; margin: 0 auto; width: 100%; }
+.dash-page { display: none; }
+.dash-page.active { display: block; }
+.dash-grid { display: grid; gap: 18px; }
+.dash-stats { grid-template-columns: repeat(4,1fr); margin-bottom: 24px; }
+.dash-card { background: linear-gradient(145deg,#142b49f0,#0c1d32f0); border: 1px solid #24415f; border-radius: 20px; padding: 22px; box-shadow: 0 6px 18px rgba(0,0,0,0.15); margin-bottom: 20px; }
+.dash-table { width: 100%; border-collapse: collapse; }
+.dash-table th, .dash-table td { text-align: left; padding: 14px 12px; border-bottom: 1px solid #24415f; vertical-align: middle; }
+.dash-table th { font-size: 12px; color: #9ab0c7; font-weight: 700; text-transform: uppercase; }
+
+.status-badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+.status-badge.waiting { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #f59e0b; }
+.status-badge.progress { background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid #0284c7; }
+.status-badge.completed { background: rgba(45, 212, 191, 0.2); color: #2dd4bf; border: 1px solid #14b8a6; }
+.status-badge.pending { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; }
+
+/* MODALS & TOAST */
+.modal-backdrop { display: none; position: fixed; inset: 0; background: #010811c0; z-index: 999; place-items: center; padding: 20px; backdrop-filter: blur(4px); }
+.modal-backdrop.show { display: grid; }
+.modal { background: linear-gradient(145deg,#142b49,#0c1d32); border: 1px solid #2d5272; width: min(580px,100%); max-height: 92vh; overflow: auto; border-radius: 20px; padding: 26px; color: #fff; }
+.modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.close { border: 0; background: #1b3855; color: #fff; border-radius: 9px; width: 34px; height: 34px; cursor: pointer; font-size: 18px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.field { display: grid; gap: 6px; }
+.field.full { grid-column: 1/-1; }
+.field label { font-weight: 700; font-size: 12px; color: #b8cbe0; }
+.field input, .field select, .field textarea { border: 1px solid #315674; border-radius: 10px; padding: 11px 13px; font: inherit; background: #0b1c31; color: #fff; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 22px; }
+.btn-sys { border: 0; border-radius: 11px; padding: 10px 16px; font: inherit; font-weight: 700; cursor: pointer; background: linear-gradient(135deg,#28c7b8,#1fa7d8); color: #061522; transition: all 0.2s; }
+.btn-sys:hover { transform: translateY(-1px); filter: brightness(1.1); }
+.btn-sys.secondary { background: #193452; color: #fff; border: 1px solid #2b5274; }
+.btn-sys.small { padding: 7px 12px; font-size: 12px; }
+.toast { position: fixed; right: 24px; bottom: 24px; background: #173f58; color: #dffefa; border: 1px solid #28c7b8; padding: 14px 20px; border-radius: 14px; display: none; z-index: 1000; font-weight: 600; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+.toast.show { display: block; }
+</style>
+</head>
+<body>
+
+<!-- PUBLIC LANDING PAGE & PHARMACY PORTAL -->
+<div id="landingView">
+  
+  <!-- TOP NAVBAR -->
+  <header class="top-nav">
+    <div class="brand-logo" onclick="switchMainTab('landing')">
+      CarePilot<span class="dot"></span>
+    </div>
+    <ul class="nav-links">
+      <li><a onclick="switchMainTab('landing')">Solutions</a></li>
+      <li><a onclick="switchMainTab('pharmacy')" class="active">💊 Online Pharmacy</a></li>
+      <li><a href="#pediatrics">Products</a></li>
+      <li><a href="#doctors">Doctors</a></li>
+      <li><a onclick="openContactModal()">Contact Us</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="btn-cart-nav" onclick="switchMainTab('pharmacy')">
+        🛒 Cart <span id="navCartCount" style="background:#fff;color:var(--teal-dark);padding:2px 7px;border-radius:99px;font-size:12px;">0</span>
+      </button>
+      <button class="btn-join" onclick="openContactModal()">Join Now</button>
+      <button class="btn-dashboard-toggle" onclick="switchView('dashboard')">⚙ Hospital System →</button>
+    </div>
+  </header>
+
+  <!-- HOME VIEW LANDING PAGE -->
+  <div id="homeSubView">
+    <!-- HERO SECTION -->
+    <section class="hero-section">
+      <div class="hero-container">
+        <div class="hero-text-side">
+          <h1 class="hero-title">Discover the Comprehensive Care You Deserve.</h1>
+          <p class="hero-subtitle">Our platform is designed to help you find the right healthcare solution and order authentic medications online, all in one convenient location.</p>
+          
+          <div class="hero-cta-wrap">
+            <button class="btn-book-hero" onclick="openModal('appointmentModal')">Book an Appointment</button>
+            <button class="btn-pharmacy-hero" onclick="switchMainTab('pharmacy')">💊 Visit Online Pharmacy</button>
+          </div>
+        </div>
+
+        <div class="hero-image-side">
+          <div class="blob-shape">
+            <!-- Vector Doctors Graphic -->
+            <svg class="hero-svg-illustration" viewBox="0 0 300 350" fill="none">
+              <circle cx="150" cy="160" r="130" fill="#23787e" opacity="0.4"/>
+              <rect x="80" y="140" width="60" height="180" rx="30" fill="#ffffff" opacity="0.9"/>
+              <circle cx="110" cy="110" r="28" fill="#e0f2fe"/>
+              <rect x="160" y="150" width="60" height="170" rx="30" fill="#1e293b"/>
+              <circle cx="190" cy="120" r="26" fill="#f8fafc"/>
+              <path d="M110 140 L110 220" stroke="#0284c7" stroke-width="6"/>
+              <path d="M190 150 L190 230" stroke="#14b8a6" stroke-width="6"/>
+              <path d="M120 160 C120 200, 180 200, 180 160" stroke="#38bdf8" stroke-width="4" fill="none"/>
+            </svg>
+            <div class="doctor-badge-pill">Doctor & Pharmacy</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Organic Bottom Wave -->
+      <div class="hero-wave">
+        <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+          <path d="M0,0 C150,90 350,-40 500,45 C650,130 900,10 1200,40 L1200,120 L0,120 Z" class="shape-fill"></path>
+        </svg>
+      </div>
+    </section>
+
+    <!-- PAGE CONTENT CONTAINER -->
+    <main class="page-container">
+      <!-- SERVICES SECTION -->
+      <div id="services">
+        <div class="section-badge-pill">Services</div>
+        
+        <div class="section-header-flex">
+          <p class="section-subtext">CarePilot provides complete provider enrollment, home medication delivery, and credentialing services.</p>
+        </div>
+
+        <div class="services-grid">
+          <!-- Card 1: Teal -->
+          <div class="service-card teal">
+            <div>
+              <div class="service-card-icon">✚</div>
+              <h3 class="service-card-title">Make an<br>Appointment</h3>
+            </div>
+            <div>
+              <div class="card-bottom-actions">
+                <button class="action-circle-btn" onclick="openModal('appointmentModal')">♥</button>
+                <button class="action-circle-btn" onclick="openModal('appointmentModal')">＋</button>
+              </div>
+              <div class="learn-more-tab" onclick="openModal('appointmentModal')">LEARN MORE</div>
+            </div>
+          </div>
+
+          <!-- Card 2: White - Pharmacy -->
+          <div class="service-card white" style="border:2px solid var(--teal-accent)">
+            <div>
+              <div class="service-card-icon">💊</div>
+              <h3 class="service-card-title">Online<br>Pharmacy</h3>
+            </div>
+            <div>
+              <div class="card-bottom-actions">
+                <button class="action-circle-btn" onclick="switchMainTab('pharmacy')">♥</button>
+                <button class="action-circle-btn" onclick="switchMainTab('pharmacy')">＋</button>
+              </div>
+              <div class="learn-more-tab" onclick="switchMainTab('pharmacy')">ORDER NOW</div>
+            </div>
+          </div>
+
+          <!-- Card 3: White -->
+          <div class="service-card white">
+            <div>
+              <div class="service-card-icon">🩺</div>
+              <h3 class="service-card-title">Doctor's<br>Community</h3>
+            </div>
+            <div>
+              <div class="card-bottom-actions">
+                <button class="action-circle-btn">♥</button>
+                <button class="action-circle-btn">＋</button>
+              </div>
+              <div class="learn-more-tab" onclick="switchView('dashboard')">LEARN MORE</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PEDIATRIC & CARE FEATURE BANNER -->
+      <div class="secondary-banner" id="pediatrics">
+        <div>
+          <h2 class="banner-title">By your side from birth to graduation</h2>
+          <p class="banner-desc">Same-day visits & home prescription delivery available for children and families. Most insurance plans accepted.</p>
+          <div class="banner-btns">
+            <button class="btn-dark" onclick="openModal('appointmentModal')">Book a Visit</button>
+            <a href="#doctors" class="btn-link">Learn More →</a>
+          </div>
+        </div>
+        <div style="text-align:center;">
+          <svg viewBox="0 0 300 180" style="width:100%;max-width:280px;">
+            <rect x="20" y="20" width="260" height="140" rx="20" fill="#eaf4f4"/>
+            <circle cx="90" cy="90" r="40" fill="#195e63"/>
+            <path d="M80 90 h20 M90 80 v20" stroke="#fff" stroke-width="4"/>
+            <rect x="150" y="60" width="90" height="12" rx="6" fill="#195e63"/>
+            <rect x="150" y="85" width="70" height="10" rx="5" fill="#94a3b8"/>
+            <rect x="150" y="105" width="80" height="10" rx="5" fill="#94a3b8"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- TOP DOCTORS SECTION -->
+      <div id="doctors">
+        <h2 class="section-title-large">All the top doctors in one place</h2>
+        
+        <div class="doctors-grid">
+          <div class="doctor-card">
+            <div class="doctor-avatar-circle">MS</div>
+            <div class="doctor-name">Dr. Maya Singh</div>
+            <div class="doctor-spec">Cardiology Specialist</div>
+            <div class="doc-card-actions">
+              <button class="btn-doc-action primary" onclick="openModal('appointmentModal')">Book Visit</button>
+              <button class="btn-doc-action" onclick="openContactModal()">Availability</button>
+            </div>
+          </div>
+
+          <div class="doctor-card">
+            <div class="doctor-avatar-circle">AM</div>
+            <div class="doctor-name">Dr. Alghani Mac</div>
+            <div class="doctor-spec">Immune & Internal Med</div>
+            <div class="doc-card-actions">
+              <button class="btn-doc-action primary" onclick="openModal('appointmentModal')">Book Visit</button>
+              <button class="btn-doc-action" onclick="openContactModal()">Availability</button>
+            </div>
+          </div>
+
+          <div class="doctor-card">
+            <div class="doctor-avatar-circle">AC</div>
+            <div class="doctor-name">Dr. Amanda Carini</div>
+            <div class="doctor-spec">Paediatrics Care</div>
+            <div class="doc-card-actions">
+              <button class="btn-doc-action primary" onclick="openModal('appointmentModal')">Book Visit</button>
+              <button class="btn-doc-action" onclick="openContactModal()">Availability</button>
+            </div>
+          </div>
+
+          <div class="doctor-card">
+            <div class="doctor-avatar-circle">SA</div>
+            <div class="doctor-name">Dr. Sabine Aaron</div>
+            <div class="doctor-spec">Orthopaedic Surgery</div>
+            <div class="doc-card-actions">
+              <button class="btn-doc-action primary" onclick="openModal('appointmentModal')">Book Visit</button>
+              <button class="btn-doc-action" onclick="openContactModal()">Availability</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ONLINE PHARMACY PORTAL VIEW -->
+  <div id="pharmacySubView" class="pharmacy-portal-section page-container">
+    <div class="pharmacy-header">
+      <div class="pharmacy-title-area">
+        <h2>CarePilot Online Pharmacy</h2>
+        <p>Order 100% genuine medicines, healthcare supplements & pediatric care with fast delivery.</p>
+        <div class="pharmacy-search-bar">
+          <input id="medSearchInput" placeholder="Search medicines e.g. Amoxicillin, Vitamin C, Paracetamol..." oninput="filterMeds()">
+        </div>
+      </div>
+      <div>
+        <button class="btn-join" style="background:#ffffff;color:var(--teal-dark);font-weight:700;" onclick="openModal('uploadRxModal')">📄 Upload Prescription</button>
+      </div>
+    </div>
+
+    <!-- Category Pills -->
+    <div class="cat-pills-row" id="catPills">
+      <button class="cat-pill active" onclick="filterMedCategory('All', this)">All Medicines</button>
+      <button class="cat-pill" onclick="filterMedCategory('Antibiotics', this)">Antibiotics</button>
+      <button class="cat-pill" onclick="filterMedCategory('Pain Relief', this)">Pain Relief</button>
+      <button class="cat-pill" onclick="filterMedCategory('Vitamins', this)">Vitamins & Supplements</button>
+      <button class="cat-pill" onclick="filterMedCategory('Pediatrics', this)">Pediatric Care</button>
+      <button class="cat-pill" onclick="filterMedCategory('First Aid', this)">First Aid & Care</button>
+    </div>
+
+    <div class="pharmacy-layout">
+      <!-- Medicines Grid -->
+      <div>
+        <div class="meds-grid" id="medsGrid"></div>
+      </div>
+
+      <!-- Shopping Cart & Order Summary -->
+      <div>
+        <div class="pharmacy-cart-card">
+          <div class="cart-header">
+            <h3 style="font-size:18px;font-weight:800;">My Order Cart</h3>
+            <span style="font-size:12px;color:var(--text-muted);" id="cartItemCount">0 items</span>
+          </div>
+
+          <div class="cart-items-list" id="cartItemsList">
+            <div style="text-align:center;padding:30px 10px;color:var(--text-muted);">
+              🛒 Your cart is empty.<br><small>Click "+ Add to Cart" on any medicine.</small>
+            </div>
+          </div>
+
+          <div class="cart-summary-line">
+            <span>Subtotal</span>
+            <span id="cartSubtotal">$0.00</span>
+          </div>
+          <div class="cart-summary-line">
+            <span>Express Delivery</span>
+            <span id="cartDelivery">$5.00</span>
+          </div>
+          <div class="cart-summary-line total">
+            <span>Total Payable</span>
+            <span id="cartTotal" style="color:var(--teal-main)">$0.00</span>
+          </div>
+
+          <button class="btn-book-hero" style="width:100%;margin-top:20px;background:var(--teal-main);color:#fff;" onclick="openPharmacyCheckout()">
+            Proceed to Checkout →
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Pharmacy Orders Track -->
+    <div style="margin-top:50px;">
+      <h3 style="font-size:22px;font-weight:800;margin-bottom:16px;">Recent Orders Status</h3>
+      <div id="patientOrdersTrack"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- CLINICAL MANAGEMENT DASHBOARD (INTERNAL SYSTEM) -->
+<div id="dashboardView" class="dashboard-view">
+  <div class="dash-app">
+    <aside class="dash-sidebar">
+      <div>
+        <div class="dash-brand" onclick="switchView('landing')">
+          <div class="dash-logo">✚</div><span>CarePilot System</span>
+        </div>
+        <nav class="dash-nav">
+          <button class="active" data-page="dashboard"><span>⌂</span> <span>Dashboard</span></button>
+          <button data-page="appointments"><span>◷</span> <span>Appointments</span></button>
+          <button data-page="pharmacyOrders"><span>💊</span> <span>Pharmacy Orders</span></button>
+          <button data-page="queue"><span>☷</span> <span>Care Queue</span></button>
+          <button data-page="patients"><span>♙</span> <span>Patient Records</span></button>
+          <button data-page="reports"><span>▣</span> <span>Medical Reports</span></button>
+          <button data-page="messages"><span>✉</span> <span>Care Team</span></button>
+          <button onclick="switchView('landing')"><span>↩</span> <span>Back to Front Page</span></button>
+        </nav>
+      </div>
+    </aside>
+
+    <main class="dash-main">
+      <header class="dash-topbar">
+        <h1 id="pageTitle">Dashboard</h1>
+        <div style="display:flex;gap:12px;">
+          <button class="btn-sys small" onclick="openModal('appointmentModal')">＋ New Appointment</button>
+          <button class="btn-sys small secondary" onclick="switchView('landing')">🌐 Public Front Page</button>
+        </div>
+      </header>
+
+      <section class="dash-content">
+        <!-- SYSTEM DASHBOARD -->
+        <div id="dashboard" class="dash-page active">
+          <div class="dash-grid dash-stats">
+            <div class="dash-card">
+              <div class="muted">Today's Appointments</div>
+              <div style="font-size:32px;font-weight:800;color:#28c7b8" id="statAppointments">0</div>
+            </div>
+            <div class="dash-card">
+              <div class="muted">Pharmacy Orders</div>
+              <div style="font-size:32px;font-weight:800;color:#38bdf8" id="statPharmacyOrders">0</div>
+            </div>
+            <div class="dash-card">
+              <div class="muted">Completed Consultations</div>
+              <div style="font-size:32px;font-weight:800;color:#a855f7" id="statCompleted">0</div>
+            </div>
+            <div class="dash-card">
+              <div class="muted">Registered Patients</div>
+              <div style="font-size:32px;font-weight:800;color:#f59e0b" id="statPatients">0</div>
+            </div>
+          </div>
+
+          <div class="dash-card">
+            <h3>Consultation Schedule Overview</h3>
+            <div id="dashScheduleList" style="margin-top:16px;"></div>
+          </div>
+        </div>
+
+        <!-- PHARMACY ORDERS SYSTEM PAGE -->
+        <div id="pharmacyOrders" class="dash-page">
+          <div class="dash-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+              <h2>Incoming Online Pharmacy Orders</h2>
+              <button class="btn-sys small secondary" onclick="switchMainTab('pharmacy'); switchView('landing');">＋ New Order (Storefront)</button>
+            </div>
+            <table class="dash-table">
+              <thead><tr><th>Order ID</th><th>Customer Name</th><th>Items</th><th>Total</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="dashPharmacyOrdersTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- APPOINTMENTS PAGE -->
+        <div id="appointments" class="dash-page">
+          <div class="dash-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+              <h2>Appointments List</h2>
+              <button class="btn-sys" onclick="openModal('appointmentModal')">＋ New Appointment</button>
+            </div>
+            <table class="dash-table">
+              <thead><tr><th>Patient</th><th>Department</th><th>Time</th><th>Doctor</th><th>Status</th><th>Action</th></tr></thead>
+              <tbody id="appointmentsTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- QUEUE PAGE -->
+        <div id="queue" class="dash-page">
+          <div class="dash-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+              <h2>Live Patient Care Queue</h2>
+              <button class="btn-sys small secondary" onclick="resetSampleData()">↻ Reset Sample Data</button>
+            </div>
+            <div id="fullQueue" style="margin-top:16px;"></div>
+          </div>
+        </div>
+
+        <!-- PATIENTS PAGE -->
+        <div id="patients" class="dash-page">
+          <div class="dash-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+              <h2>Registered Patient Records</h2>
+              <button class="btn-sys" onclick="openModal('patientModal')">＋ Register Patient</button>
+            </div>
+            <table class="dash-table">
+              <thead><tr><th>Name</th><th>Phone</th><th>Last Visit</th><th>Condition</th><th>Medical Report</th></tr></thead>
+              <tbody id="patientsTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- REPORTS PAGE -->
+        <div id="reports" class="dash-page">
+          <div class="dash-card">
+            <h2>Individual Patient Medical Reports</h2>
+            <table class="dash-table" style="margin-top:16px;">
+              <thead><tr><th>Patient Name</th><th>Phone</th><th>Condition</th><th>Download</th></tr></thead>
+              <tbody id="reportsTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- MESSAGES PAGE -->
+        <div id="messages" class="dash-page">
+          <div class="dash-card">
+            <h2>Care Team Messages</h2>
+            <textarea id="messageText" rows="5" style="width:100%;background:#0b1c31;color:#fff;border:1px solid #315674;border-radius:10px;padding:12px;margin-top:12px;" placeholder="Type your broadcast message to the staff..."></textarea>
+            <button class="btn-sys" style="margin-top:12px;" onclick="sendTeamMessage()">Send Message</button>
+          </div>
+        </div>
+
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- PHARMACY CHECKOUT MODAL -->
+<div id="pharmacyCheckoutModal" class="modal-backdrop">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>Complete Pharmacy Order</h2>
+      <button class="close" onclick="closeModal('pharmacyCheckoutModal')">×</button>
+    </div>
+    <form id="pharmacyCheckoutForm">
+      <div class="form-grid">
+        <div class="field"><label>Full Name</label><input id="rxCustName" required placeholder="e.g. Aisha Khan"></div>
+        <div class="field"><label>Phone Number</label><input id="rxCustPhone" required placeholder="e.g. 555-0188"></div>
+        <div class="field full"><label>Delivery Address</label><input id="rxCustAddress" required placeholder="e.g. House 42, Block B, Health City"></div>
+        <div class="field"><label>Payment Method</label>
+          <select id="rxPayMethod">
+            <option>Cash on Delivery</option>
+            <option>Credit / Debit Card</option>
+            <option>Health Insurance Claim</option>
+          </select>
+        </div>
+        <div class="field"><label>Prescription Note (Optional)</label><input id="rxNotes" placeholder="Doctor name or Rx Ref#"></div>
+      </div>
+      <div style="background:#0b1c31;padding:14px;border-radius:12px;margin-top:16px;border:1px solid #24415f;">
+        <div style="display:flex;justify-content:space-between;font-weight:700;">
+          <span>Total Order Cost:</span>
+          <span id="modalCheckoutTotal" style="color:#28c7b8;">$0.00</span>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-sys secondary" onclick="closeModal('pharmacyCheckoutModal')">Cancel</button>
+        <button class="btn-sys" type="submit">Place Pharmacy Order 🚀</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- UPLOAD PRESCRIPTION MODAL -->
+<div id="uploadRxModal" class="modal-backdrop">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>Upload Doctor Prescription</h2>
+      <button class="close" onclick="closeModal('uploadRxModal')">×</button>
+    </div>
+    <form id="rxUploadForm">
+      <div class="form-grid">
+        <div class="field"><label>Patient Name</label><input id="uploadRxName" required placeholder="Full Name"></div>
+        <div class="field"><label>Phone</label><input id="uploadRxPhone" required placeholder="Phone Number"></div>
+        <div class="field full"><label>Prescription Image / File Notes</label>
+          <textarea id="uploadRxDetails" rows="3" required placeholder="Type doctor's notes or medicine names prescribed..."></textarea>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-sys secondary" onclick="closeModal('uploadRxModal')">Cancel</button>
+        <button class="btn-sys" type="submit">Submit Prescription</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- APPOINTMENT MODAL -->
+<div id="appointmentModal" class="modal-backdrop">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>Book Consultation / Appointment</h2>
+      <button class="close" onclick="closeModal('appointmentModal')">×</button>
+    </div>
+    <form id="appointmentForm">
+      <div class="form-grid">
+        <div class="field"><label>Patient Full Name</label><input id="appointmentPatient" required placeholder="e.g. Sarah Johnson"></div>
+        <div class="field"><label>Phone Number</label><input id="appointmentPhone" placeholder="e.g. 555-0142"></div>
+        <div class="field"><label>Department</label>
+          <select id="appointmentDepartment">
+            <option>Cardiology</option>
+            <option>Orthopaedics</option>
+            <option>General Medicine</option>
+            <option>Paediatrics</option>
+          </select>
+        </div>
+        <div class="field"><label>Attending Doctor</label><input id="appointmentDoctor" value="Dr. Maya Singh"></div>
+        <div class="field"><label>Appointment Time</label><input id="appointmentTime" type="text" value="10:30 AM"></div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-sys secondary" onclick="closeModal('appointmentModal')">Cancel</button>
+        <button class="btn-sys" type="submit">Confirm Appointment</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- PATIENT MODAL -->
+<div id="patientModal" class="modal-backdrop">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>Register Patient Record</h2>
+      <button class="close" onclick="closeModal('patientModal')">×</button>
+    </div>
+    <form id="patientForm">
+      <div class="form-grid">
+        <div class="field"><label>Full Name</label><input id="newPatientName" required placeholder="e.g. Rahul Verma"></div>
+        <div class="field"><label>Phone</label><input id="newPatientPhone" placeholder="e.g. 555-0199"></div>
+        <div class="field full"><label>Condition / Reason</label><input id="newPatientCondition" required placeholder="e.g. Routine Cardiology Checkup"></div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-sys secondary" onclick="closeModal('patientModal')">Cancel</button>
+        <button class="btn-sys" type="submit">Save Patient</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- CONTACT MODAL -->
+<div id="contactModal" class="modal-backdrop">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>Contact CarePilot Hospital & Pharmacy</h2>
+      <button class="close" onclick="closeModal('contactModal')">×</button>
+    </div>
+    <div style="line-height:1.8;">
+      <p><strong>📍 Address:</strong> 100 Medical Center Drive, Suite 400</p>
+      <p><strong>📞 Emergency & Pharmacy Helpline:</strong> 1-800-555-CARE (2273)</p>
+      <p><strong>✉ Email:</strong> pharmacy@carepilot-hospital.com</p>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-sys" onclick="closeModal('contactModal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+const KEY = 'carepilot_hms_data_v4';
+
+function today() { return new Date().toISOString().slice(0,10); }
+
+const MEDICINES_CATALOG = [
+  { id: 'm1', name: 'Amoxicillin 500mg', category: 'Antibiotics', price: 14.50, desc: 'Broad-spectrum antibiotic capsule (10 Strip)', rx: true, icon: '💊' },
+  { id: 'm2', name: 'Paracetamol Extra 500mg', category: 'Pain Relief', price: 6.20, desc: 'Fast fever & pain relief tablets (20 Pack)', rx: false, icon: '🧪' },
+  { id: 'm3', name: 'Ibuprofen 400mg', category: 'Pain Relief', price: 8.90, desc: 'Anti-inflammatory pain reliever', rx: false, icon: '💊' },
+  { id: 'm4', name: 'Vitamin C 1000mg + Zinc', category: 'Vitamins', price: 12.00, desc: 'Immunity booster effervescent tablets (30s)', rx: false, icon: '🍊' },
+  { id: 'm5', name: 'Omeprazole 20mg', category: 'Pain Relief', price: 11.50, desc: 'Acid reflux & heartburn relief', rx: true, icon: '💊' },
+  { id: 'm6', name: 'Pediatric Cough Syrup', category: 'Pediatrics', price: 9.80, desc: 'Gentle cough relief syrup for children 100ml', rx: false, icon: '🍼' },
+  { id: 'm7', name: 'First Aid Bandage Kit', category: 'First Aid', price: 15.00, desc: 'Complete sterile bandages & antiseptic wipes', rx: false, icon: '🩹' },
+  { id: 'm8', name: 'Multivitamin Complete', category: 'Vitamins', price: 18.50, desc: 'Daily essential minerals & vitamins (60 Caps)', rx: false, icon: '🌿' }
+];
+
+function getInitialData() {
+  return {
+    appointments: [
+      { id: 'a1', patient: 'Aisha Khan', phone: '555-0188', department: 'Cardiology', doctor: 'Dr. Maya Singh', time: '09:30 AM', status: 'In Progress', date: today() },
+      { id: 'a2', patient: 'Karan Sharma', phone: '555-0211', department: 'Orthopaedics', doctor: 'Dr. Sabine Aaron', time: '11:15 AM', status: 'Waiting', date: today() }
+    ],
+    patients: [
+      { name: 'Aisha Khan', phone: '555-0188', last: 'Today', condition: 'Cardiology Checkup' },
+      { name: 'Karan Sharma', phone: '555-0211', last: 'Today', condition: 'Joint Pain Follow-up' }
+    ],
+    pharmacyOrders: [
+      { id: 'RX-1092', name: 'Aisha Khan', phone: '555-0188', items: 'Amoxicillin 500mg (x1), Vitamin C (x1)', total: '$26.50', status: 'Processing' },
+      { id: 'RX-1093', name: 'Rahul Verma', phone: '555-0422', items: 'Paracetamol Extra (x2)', total: '$17.40', status: 'Delivered' }
+    ]
+  };
+}
+
+let data;
+let cart = {}; // { m1: 2, m2: 1 }
+
+try {
+  const saved = localStorage.getItem(KEY);
+  data = saved ? JSON.parse(saved) : getInitialData();
+  if(!data.appointments || !data.pharmacyOrders) data = getInitialData();
+} catch(e) {
+  data = getInitialData();
+}
+
+function save() {
+  try {
+    localStorage.setItem(KEY, JSON.stringify(data));
+  } catch(e) {}
+}
+
+function $(id) { return document.getElementById(id); }
+
+function toast(msg){
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function switchView(view){
+  if(view === 'dashboard'){
+    $('landingView').style.display = 'none';
+    $('dashboardView').classList.add('active');
+    render();
+  } else {
+    $('landingView').style.display = 'block';
+    $('dashboardView').classList.remove('active');
+  }
+}
+
+function switchMainTab(tab){
+  if(tab === 'pharmacy'){
+    $('homeSubView').style.display = 'none';
+    $('pharmacySubView').classList.add('active');
+    renderPharmacy();
+  } else {
+    $('homeSubView').style.display = 'block';
+    $('pharmacySubView').classList.remove('active');
+  }
+}
+
+function openModal(id){ $(id).classList.add('show'); }
+function closeModal(id){ $(id).classList.remove('show'); }
+function openContactModal(){ openModal('contactModal'); }
+
+function resetSampleData(){
+  data = getInitialData();
+  cart = {};
+  save();
+  render();
+  toast('Sample data restored!');
+}
+
+/* PHARMACY PORTAL LOGIC */
+let currentCategory = 'All';
+
+function renderPharmacy() {
+  const medsGrid = $('medsGrid');
+  const search = ($('medSearchInput').value || '').toLowerCase();
+
+  const filtered = MEDICINES_CATALOG.filter(m => {
+    const matchCat = currentCategory === 'All' || m.category === currentCategory;
+    const matchSearch = m.name.toLowerCase().includes(search) || m.desc.toLowerCase().includes(search);
+    return matchCat && matchSearch;
+  });
+
+  medsGrid.innerHTML = filtered.map(m => `
+    <div class="med-card">
+      ${m.rx ? '<span class="rx-badge">Rx Required</span>' : ''}
+      <div class="med-icon-wrap">${m.icon}</div>
+      <div>
+        <div class="med-name">${m.name}</div>
+        <div class="med-desc">${m.desc}</div>
+      </div>
+      <div class="med-bottom">
+        <div class="med-price">$${m.price.toFixed(2)}</div>
+        <button class="btn-add-cart" onclick="addToCart('${m.id}')">＋ Add to Cart</button>
+      </div>
+    </div>
+  `).join('');
+
+  renderCart();
+  renderPatientOrdersTrack();
+}
+
+function filterMedCategory(cat, el) {
+  currentCategory = cat;
+  document.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
+  if(el) el.classList.add('active');
+  renderPharmacy();
+}
+
+function filterMeds() {
+  renderPharmacy();
+}
+
+function addToCart(medId) {
+  cart[medId] = (cart[medId] || 0) + 1;
+  renderCart();
+  toast('Item added to cart!');
+}
+
+function updateCartQty(medId, delta) {
+  if(!cart[medId]) return;
+  cart[medId] += delta;
+  if(cart[medId] <= 0) delete cart[medId];
+  renderCart();
+}
+
+function renderCart() {
+  const list = $('cartItemsList');
+  const keys = Object.keys(cart);
+  let subtotal = 0;
+  let totalItems = 0;
+
+  if(keys.length === 0) {
+    list.innerHTML = `<div style="text-align:center;padding:30px 10px;color:var(--text-muted);">🛒 Your cart is empty.<br><small>Click "+ Add to Cart" on any medicine.</small></div>`;
+    $('cartSubtotal').textContent = '$0.00';
+    $('cartTotal').textContent = '$0.00';
+    $('cartItemCount').textContent = '0 items';
+    $('navCartCount').textContent = '0';
+    return;
+  }
+
+  let html = '';
+  keys.forEach(id => {
+    const med = MEDICINES_CATALOG.find(x => x.id === id);
+    if(!med) return;
+    const qty = cart[id];
+    const itemTotal = med.price * qty;
+    subtotal += itemTotal;
+    totalItems += qty;
+
+    html += `
+      <div class="cart-item-row">
+        <div>
+          <strong>${med.name}</strong><br>
+          <small style="color:var(--text-muted);">$${med.price.toFixed(2)} each</small>
+        </div>
+        <div class="cart-item-qty">
+          <button class="btn-qty" onclick="updateCartQty('${id}', -1)">-</button>
+          <span>${qty}</span>
+          <button class="btn-qty" onclick="updateCartQty('${id}', 1)">+</button>
+        </div>
+      </div>
+    `;
+  });
+
+  list.innerHTML = html;
+  const delivery = subtotal > 0 ? 5.00 : 0.00;
+  const total = subtotal + delivery;
+
+  $('cartSubtotal').textContent = `$${subtotal.toFixed(2)}`;
+  $('cartDelivery').textContent = `$${delivery.toFixed(2)}`;
+  $('cartTotal').textContent = `$${total.toFixed(2)}`;
+  $('cartItemCount').textContent = `${totalItems} items`;
+  $('navCartCount').textContent = `${totalItems}`;
+  $('modalCheckoutTotal').textContent = `$${total.toFixed(2)}`;
+}
+
+function openPharmacyCheckout() {
+  if(Object.keys(cart).length === 0) {
+    toast('Your cart is empty!');
+    return;
+  }
+  openModal('pharmacyCheckoutModal');
+}
+
+function renderPatientOrdersTrack() {
+  const track = $('patientOrdersTrack');
+  if(!data.pharmacyOrders || data.pharmacyOrders.length === 0) {
+    track.innerHTML = '<div style="color:var(--text-muted);">No active pharmacy orders found.</div>';
+    return;
+  }
+  track.innerHTML = data.pharmacyOrders.map(o => `
+    <div style="background:#ffffff;border:1px solid var(--border);padding:16px 20px;border-radius:14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <strong>Order #${o.id}</strong> — <span style="color:var(--teal-main);">${o.name}</span><br>
+        <small style="color:var(--text-muted);">${o.items}</small>
+      </div>
+      <div style="text-align:right;">
+        <span class="status-badge ${o.status === 'Delivered' ? 'completed' : 'progress'}">${o.status}</span>
+        <div style="font-weight:800;margin-top:4px;">${o.total}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+$('pharmacyCheckoutForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const name = $('rxCustName').value.trim();
+  const phone = $('rxCustPhone').value.trim();
+  if(!name || !phone) return;
+
+  let itemList = [];
+  let subtotal = 0;
+  Object.keys(cart).forEach(id => {
+    const med = MEDICINES_CATALOG.find(x => x.id === id);
+    if(med) {
+      itemList.push(`${med.name} (x${cart[id]})`);
+      subtotal += med.price * cart[id];
+    }
+  });
+
+  const total = `$${(subtotal + 5.00).toFixed(2)}`;
+  const newOrder = {
+    id: 'RX-' + Math.floor(1000 + Math.random() * 9000),
+    name: name,
+    phone: phone,
+    items: itemList.join(', '),
+    total: total,
+    status: 'Processing'
+  };
+
+  data.pharmacyOrders.unshift(newOrder);
+  cart = {};
+  save();
+  renderPharmacy();
+  render();
+  closeModal('pharmacyCheckoutModal');
+  toast(`Pharmacy Order #${newOrder.id} placed successfully!`);
+});
+
+$('rxUploadForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const name = $('uploadRxName').value.trim();
+  closeModal('uploadRxModal');
+  toast(`Prescription submitted for ${name}. Our pharmacist will review it.`);
+});
+
+/* DASHBOARD SYSTEM RENDER & LOGIC */
+function downloadSinglePatientReport(patientName){
+  const p = data.patients.find(x => x.name.toLowerCase() === patientName.toLowerCase()) || { name: patientName, phone: '555-0100', condition: 'General Medical Exam' };
+  let txt = `CAREPILOT HOSPITAL MEDICAL REPORT\n==================================\nPatient Name: ${p.name}\nPhone: ${p.phone}\nCondition / Notes: ${p.condition}\nDate: ${new Date().toLocaleDateString()}\nStatus: Verified\nAttending Doctor: CarePilot Clinical Staff\n==================================\nThis document is an official medical summary generated by CarePilot HMS.`;
+  const blob = new Blob([txt], { type: 'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `Medical_Report_${p.name.replace(/\s+/g,'_')}.txt`;
+  a.click();
+  toast(`Report downloaded for ${p.name}`);
+}
+
+function updateOrderStatus(id, newStatus) {
+  const ord = data.pharmacyOrders.find(x => x.id === id);
+  if(ord) {
+    ord.status = newStatus;
+    save();
+    render();
+    renderPharmacy();
+    toast(`Order #${id} marked as ${newStatus}`);
+  }
+}
+
+function completeAppointment(id){
+  const app = data.appointments.find(a => a.id === id);
+  if(app){
+    app.status = 'Completed';
+    save();
+    render();
+    toast(`Appointment marked completed for ${app.patient}`);
+  }
+}
+
+function sendTeamMessage(){
+  const msg = $('messageText').value.trim();
+  if(!msg){
+    toast('Please enter a message.');
+    return;
+  }
+  $('messageText').value = '';
+  toast('Message broadcast to Care Team!');
+}
+
+function render(){
+  // Stats
+  $('statAppointments').textContent = data.appointments.length;
+  $('statPharmacyOrders').textContent = data.pharmacyOrders ? data.pharmacyOrders.length : 0;
+  $('statCompleted').textContent = data.appointments.filter(x => x.status === 'Completed').length;
+  $('statPatients').textContent = data.patients.length;
+
+  // Render Schedule
+  const schedList = $('dashScheduleList');
+  if (data.appointments.length === 0) {
+    schedList.innerHTML = '<div style="color:#9ab0c7;padding:12px;">No appointments scheduled for today.</div>';
+  } else {
+    schedList.innerHTML = data.appointments.map(a => `
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;border-bottom:1px solid #24415f;">
+        <div>
+          <strong>${a.patient}</strong> <span style="color:#28c7b8;margin-left:8px;">(${a.time})</span>
+          <br><span style="color:#9ab0c7;font-size:12px;">${a.department} · ${a.doctor}</span>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <span class="status-badge ${a.status === 'Completed' ? 'completed' : a.status === 'In Progress' ? 'progress' : 'waiting'}">${a.status}</span>
+          <button class="btn-sys small" onclick="downloadSinglePatientReport('${a.patient}')">📥 Report</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Dashboard Pharmacy Orders Table
+  $('dashPharmacyOrdersTable').innerHTML = (data.pharmacyOrders || []).map(o => `
+    <tr>
+      <td><strong>#${o.id}</strong></td>
+      <td>${o.name}<br><small style="color:#9ab0c7">${o.phone}</small></td>
+      <td style="max-width:260px;font-size:13px;color:#9ab0c7;">${o.items}</td>
+      <td style="font-weight:700;color:#28c7b8;">${o.total}</td>
+      <td><span class="status-badge ${o.status === 'Delivered' ? 'completed' : 'progress'}">${o.status}</span></td>
+      <td>
+        ${o.status !== 'Delivered' ? `<button class="btn-sys small" onclick="updateOrderStatus('${o.id}', 'Delivered')">Mark Delivered</button>` : '<span style="color:#28c7b8;font-size:12px;">Completed</span>'}
+      </td>
+    </tr>
+  `).join('');
+
+  // Render Appointments Table
+  $('appointmentsTable').innerHTML = data.appointments.map(a => `
+    <tr>
+      <td><strong>${a.patient}</strong><br><small style="color:#9ab0c7">${a.phone}</small></td>
+      <td>${a.department}</td>
+      <td>${a.time}</td>
+      <td>${a.doctor}</td>
+      <td><span class="status-badge ${a.status === 'Completed' ? 'completed' : a.status === 'In Progress' ? 'progress' : 'waiting'}">${a.status}</span></td>
+      <td>
+        ${a.status !== 'Completed' ? `<button class="btn-sys small" onclick="completeAppointment('${a.id}')">✓ Complete</button>` : ''}
+        <button class="btn-sys small secondary" onclick="downloadSinglePatientReport('${a.patient}')">Report</button>
+      </td>
+    </tr>
+  `).join('');
+
+  // Render Live Queue
+  $('fullQueue').innerHTML = data.appointments.map(a => `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:14px;background:#0b1c31;border-radius:12px;margin-bottom:10px;border:1px solid #24415f;">
+      <div>
+        <strong style="font-size:16px;">${a.patient}</strong> 
+        <span style="color:#9ab0c7;margin-left:10px;">${a.department} (${a.doctor})</span>
+      </div>
+      <div>
+        <span class="status-badge ${a.status === 'Completed' ? 'completed' : a.status === 'In Progress' ? 'progress' : 'waiting'}">${a.status}</span>
+      </div>
+    </div>
+  `).join('');
+
+  // Render Patients Table
+  $('patientsTable').innerHTML = data.patients.map(p => `
+    <tr>
+      <td><strong>${p.name}</strong></td>
+      <td>${p.phone}</td>
+      <td>${p.last}</td>
+      <td>${p.condition}</td>
+      <td><button class="btn-sys small" onclick="downloadSinglePatientReport('${p.name}')">📥 Download</button></td>
+    </tr>
+  `).join('');
+
+  // Render Reports Table
+  $('reportsTable').innerHTML = data.patients.map(p => `
+    <tr>
+      <td><strong>${p.name}</strong></td>
+      <td>${p.phone}</td>
+      <td>${p.condition}</td>
+      <td><button class="btn-sys small" onclick="downloadSinglePatientReport('${p.name}')">📥 Download Report</button></td>
+    </tr>
+  `).join('');
+}
+
+// Form Listeners
+$('appointmentForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const patient = $('appointmentPatient').value.trim();
+  if(!patient) return;
+
+  const newApp = {
+    id: 'a-' + Date.now(),
+    patient: patient,
+    phone: $('appointmentPhone').value || '555-0100',
+    department: $('appointmentDepartment').value,
+    doctor: $('appointmentDoctor').value || 'Dr. Maya Singh',
+    time: $('appointmentTime').value || '11:00 AM',
+    status: 'Waiting',
+    date: today()
+  };
+
+  data.appointments.unshift(newApp);
+
+  if(!data.patients.some(x => x.name.toLowerCase() === patient.toLowerCase())){
+    data.patients.unshift({
+      name: patient,
+      phone: newApp.phone,
+      last: 'Today',
+      condition: newApp.department
+    });
+  }
+
+  save();
+  render();
+  closeModal('appointmentModal');
+  toast(`Appointment booked for ${patient}!`);
+});
+
+$('patientForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const name = $('newPatientName').value.trim();
+  if(!name) return;
+
+  data.patients.unshift({
+    name: name,
+    phone: $('newPatientPhone').value || '555-0199',
+    last: 'Today',
+    condition: $('newPatientCondition').value || 'General Consultation'
+  });
+
+  save();
+  render();
+  closeModal('patientModal');
+  toast(`Patient record registered for ${name}!`);
+});
+
+// Setup sidebar navigation
+document.querySelectorAll('.dash-nav button[data-page]').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.dash-page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.dash-nav button').forEach(x => x.classList.remove('active'));
+    const pageId = b.dataset.page;
+    if($(pageId)) $(pageId).classList.add('active');
+    b.classList.add('active');
+    $('pageTitle').textContent = b.innerText.trim().replace(/^[^\w]+/, '');
+  });
+});
+
+render();
+</script>
+</body>
+</html>
